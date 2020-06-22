@@ -182,7 +182,7 @@ var bsShift = {
     },
     showUI:function(type){
         let cssHD="";
-        let Head1="<div class='clsRow'>" + "<div class='clsHead' >"+this.shiftMonth.getFullYear()+" 年 "+(this.shiftMonth.getMonth()+1)+" 月"+"</div>";
+        let Head1="<div class='clsRow'>" + "<div class='clsHead' >"+this.shiftMonth.getFullYear()+"/"+(this.shiftMonth.getMonth()+1)+""+"</div>";
         let Head2="<div class='clsRow'>" + "<div class='clsWeek' >姓名</div>";
         for (let i = 0; i < clsChk.length; i++) {
             cssHD=(arrHLD[i]=="")?"":" clsHoliday";
