@@ -1,0 +1,40 @@
+<html>
+<head>
+    <meta http-equiv="Content-Language" content="zh-tw">
+    <meta charset="UTF-8">
+    <title></title>
+    <link href="js//bsShift.css" rel="stylesheet" type="text/css" media="all">
+    <script src="js/bsData.js" type="text/javascript"></script>
+    <script src="js/bsShift.js" type="text/javascript"></script>
+</head>
+<body>
+    <div id="panel">
+        <div style="display: inline-block;font-size: 2rem;margin: 8px;">排班小工具</div>
+        <button id="btnPreMonth" class="bsButton bsBoderRed bsLarge">往上個月</button>
+        <button id="btnThisMonth" class="bsButton bsBoderRed bsLarge">當月</button>
+        <button id="btnNextMonth" class="bsButton bsBoderRed bsLarge">往下個月</button>
+        <button id="btnGenShift" class="bsButton bsBoderRed bsLarge">產生排班表</button>
+    </div>
+    <div id="container" class="clsTable"></div>
+    <div id="tail"></div>
+</body>
+<script>
+window.addEventListener('load' ,function(){
+    bsShift.initial();
+});
+document.getElementById("btnGenShift").addEventListener('click',function(){
+    bsShift.genShift()
+    bsShift.checkAllShift();
+    bsShift.showUI();
+});
+document.getElementById("btnPreMonth").addEventListener('click',function(){
+    bsShift.initial(-1);
+});
+document.getElementById("btnThisMonth").addEventListener('click',function(){
+    bsShift.initial();
+});
+document.getElementById("btnNextMonth").addEventListener('click',function(){
+    bsShift.initial(1);
+});
+</script>
+</html>

@@ -1,0 +1,14 @@
+body{font-family: '微軟正黑體',Sans-Serif,Arial;}
+.clsTable { display: table; width: 100%; border-spacing: 1px; }
+.clsRow { display: table-row; border-bottom: #188EBE 1px solid;}
+.clsCol:first-child { background-color: #197864;color: #ffffff;}
+.clsHead, .clsWeek { display: table-cell; vertical-align: top; text-align: center; padding: 5px 8px;}
+.clsHead:first-child, .clsWeek:first-child{ background-color:#1844be;}
+.clsCol{ display: table-cell; vertical-align:middle ; text-align: center; padding: 3px; border-bottom: #188EBE 1px solid; }
+.clsHead, .clsWeek { background-color: #188EBE; color: #ffffff; }
+.clsHoliday{ background-color: #be18b0; color: #ffffff; }
+.IsHLD{color: #fd0404;}
+.bsButton{ padding: 8px 16px; display: inline-block; vertical-align: middle; overflow: hidden; text-decoration: none; text-align: center; cursor: pointer; white-space: nowrap;}
+.bsBoderRed{ background-color:lightblue ;border:1px solid #fd0404; border-radius: 8px;}
+.bsButton:hover{ background-color: antiquewhite;}
+.bsLarge{font-size: 1.25rem;margin: 8px;}
