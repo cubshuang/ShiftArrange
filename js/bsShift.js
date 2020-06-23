@@ -6,50 +6,42 @@ const arrayCopy=(arr) =>arr.slice(0);
 const arrayColumn = (arr, n) => arr.map(x => x[n]);
 const _dfSign=-1;  //Holidy 0:自排,-1:預設
 var bsShift = {
-    MyShift:[],
-    clsChk:[], cntChk:[], hldCnt:[], arrHLD:[],arrWKD:[],
-    setX:null, setY:null, setValue:null,
-    dCnt:null, shiftMonth:null,
+    MyShift:[], clsChk:[], cntChk:[], hldCnt:[], arrHLD:[],arrWKD:[],
+    dCnt:0, mCnt:0, shiftMonth:null, setX:null, setY:null, setValue:null,
     //initial        
     initial:function(addMonth){
-        if (addMonth==null){
-            dd=Date.now();
-        }else{
-            dd=new Date(bsShift.shiftMonth.getFullYear(),bsShift.shiftMonth.getMonth()+1+addMonth,0)
-        }
+        let dd=(addMonth==null)?Date.now():new Date(bsShift.shiftMonth.getFullYear(),bsShift.shiftMonth.getMonth()+1+addMonth,0);
         this.iniMyShift(dd);
         this.showUI(0);
     },
     iniMyShift:function(dd){
-        let d=new Date(dd);
-        this.shiftMonth=new Date(d.getFullYear(),d.getMonth()+1,0);
+        this.shiftMonth=new Date((new Date(dd)).getFullYear(),(new Date(dd)).getMonth()+1,0);
         this.MyShift=new Array();
         this.dCnt=this.shiftMonth.getDate();
-        for (let i = 0; i < Member.length; i++) {
+        this.mCnt=data.Member.length;
+        for (let i = 0; i < this.mCnt; i++) {
             this.MyShift[i]=new Array(this.dCnt);
             for (let j = 0; j < this.dCnt; j++) {
                 this.MyShift[i][j]=_dfSign;
             }
         }
-        clsChk=this.MyShift[0].slice();
-        arrHLD=this.MyShift[0].slice()
-        arrWKD=this.MyShift[0].slice();
-        cntChk=arrayColumn(this.MyShift, 0);
-        hldCnt=arrayColumn(this.MyShift, 0);
-        let myDate,YY,MM,wkDay,cssHD;
+        this.clsChk=this.MyShift[0].slice();
+        this.arrHLD=this.MyShift[0].slice();
+        this.arrWKD=this.MyShift[0].slice();
+        this.cntChk=arrayColumn(this.MyShift, 0);
+        this.hldCnt=arrayColumn(this.MyShift, 0);
+        let myDate,YY,MM,wkDay;
         YY=this.shiftMonth.getFullYear();
         MM=this.shiftMonth.getMonth()+1;
-        for (let i = 0; i < clsChk.length; i++) {
+        for (let i = 0; i < this.clsChk.length; i++) {
             myDate=new Date(YY, MM-1, (i+1));
             wkDay=(myDate).getDay();
-            arrWKD[i]=WeekDay[wkDay];
-            arrHLD[i]=(OwHoliDay.some(e=>isEqualDate(e.d,myDate)))?((wkDay=="0" || wkDay=="6")?"":"其他"):(((wkDay=="0" || wkDay=="6")?"Holiday":""));
+            this.arrWKD[i]=data.WeekDay[wkDay];
+            this.arrHLD[i]=(data.OwHoliDay.some(e=>isEqualDate(e.d,myDate)))?((wkDay=="0" || wkDay=="6")?"":"其他"):(((wkDay=="0" || wkDay=="6")?"Holiday":""));
         }
     },
     setShiftValue:function(Mem,Day,Value){
-        setX=Mem;
-        setY=Day;
-        setValue=Value;
+        setX=Mem; setY=Day; setValue=Value;
         this.MyShift[Mem][Day]=Value;
     },
     genShift:function(){
@@ -66,13 +58,13 @@ var bsShift = {
         this.log("需要人工處理" );
     },
     genMyShift:function(){
-        let iShift,Cnt=Member.length;
+        let iShift;
         let Temp=[],TempReturn=[];
         for (let i = 0; i < this.dCnt; i++) {
             //1.檢核當日排班數量
-            for(let k = 0; k < ShiftCnts.length; k++) {
+            for(let k = 0; k < data.ShiftCnts.length; k++) {
                 //2.檢核當日排班數班別是否已完成
-                let iCnts=ShiftCnts[k];
+                let iCnts=data.ShiftCnts[k];
                 //Array暫存
                 let arryCol=arrayColumn(this.MyShift, i);
                 //查詢已排的班別
@@ -86,7 +78,7 @@ var bsShift = {
                 while (iCnts>0) {
                     ir++;
                     //1.找出排班人員
-                    iShift=bsRandom.getRandom(Cnt)+1;    //0會造成tempCol誤判，index先+1，更新時再-1
+                    iShift=bsRandom.getRandom(this.mCnt)+1;    //0會造成tempCol誤判，index先+1，更新時再-1
                     if (ir==1){
                         if (iStep%=4){ TempReturn = Temp.map(arrayCopy); }  
                         Temp = this.MyShift.map(arrayCopy);
@@ -126,19 +118,31 @@ var bsShift = {
                     }
                 }
             }
+            let xxx=0;
+            if (i>1){
+                let arryCol=arrayColumn(this.MyShift, i);
+                if(data.ShiftCnts.join('-')!=arryCol.reduce(reducer_C1,0)+"-"+arryCol.reduce(reducer_C2,0)+"-"+arryCol.reduce(reducer_C3,0)){
+                    for (let j = 0; j < data.Member.length; j++) {
+                        //this.MyShift[i][j] = _dfSign;
+                        //this.MyShift[i-1][j] = _dfSign;
+                    }
+                    console.log(arryCol);
+                    console.log("重排"+xxx);
+                    
+                }
+            }
         }
         return true;
     },
     checkContinue:function(iMem,iDay){
-        let arr=this.MyShift[iMem];
         let bbb=0;
         for (let i = 0; i < iDay; i++) {
-            bbb=(arr[i]>0)?bbb+1:0;
+            bbb=(this.MyShift[iMem-1][i]>0)?bbb+1:0;
         }
         return bbb;
     },
     checkShift:function(iMem,iDay,iCls){
-        let iCnts=ShiftCnts[iCls-1];
+        let iCnts=data.ShiftCnts[iCls-1];
         //該位置是否已有值
         let arryCol=arrayColumn(this.MyShift, iDay);
         let tempCol=arryCol.map((x,v) => (x==_dfSign)?_dfSign:v+1).filter(e => e!=_dfSign);
@@ -146,7 +150,7 @@ var bsShift = {
             return false;
         }
         //是否已經連續休假MaxShift
-        if(this.checkContinue(iMem-1,iDay)>=MaxShift){
+        if(this.checkContinue(iMem,iDay)>=data.MaxShift){
             return false;
         }
         //該班別是否已經滿
@@ -166,34 +170,33 @@ var bsShift = {
         this.MyShift.forEach(array => {
             for (let i = 0; i < array.length; i++) {
                 if (array[i]<=0){
-                    hldCnt[row]+=1;
-                    cntChk[row]=0;
+                    this.hldCnt[row]+=1;
+                    this.cntChk[row]=0;
                 }else{
-                    cntChk[row]+=1;
+                    this.cntChk[row]+=1;
                 }
                 if (row==0){
                     //檢查各班別數量
                    let arryCol=arrayColumn(this.MyShift, i);
-                   clsChk[i]=arryCol.reduce(reducer_C1,0)+"-"+arryCol.reduce(reducer_C2,0)+"-"+arryCol.reduce(reducer_C3,0);
+                   this.clsChk[i]=arryCol.reduce(reducer_C1,0)+"-"+arryCol.reduce(reducer_C2,0)+"-"+arryCol.reduce(reducer_C3,0);
                 }
             }
             row++;
         });
+        console.log(this.clsChk);
     },
     showUI:function(type){
         let cssHD="";
         let Head1="<div class='clsRow'>" + "<div class='clsHead' >"+this.shiftMonth.getFullYear()+"/"+(this.shiftMonth.getMonth()+1)+""+"</div>";
         let Head2="<div class='clsRow'>" + "<div class='clsWeek' >姓名</div>";
-        for (let i = 0; i < clsChk.length; i++) {
-            cssHD=(arrHLD[i]=="")?"":" clsHoliday";
+        for (let i = 0; i < this.clsChk.length; i++) {
+            cssHD=(this.arrHLD[i]=="")?"":" clsHoliday";
             Head1+="<div class='clsHead" + cssHD + "' id='H_" + (i+1) +"'>"+ (i+1) +"</div>";
-            //Head2+="<div class='clsWeek" + cssHD + "' id='W_" + (i+1) +"'>"+ WeekDay[wkDay] +"</div>";
-            Head2+="<div class='clsWeek" + cssHD + "' id='W_" + (i+1) +"'>"+ arrWKD[i] +"</div>";
+            Head2+="<div class='clsWeek" + cssHD + "' id='W_" + (i+1) +"'>"+ this.arrWKD[i] +"</div>";
         }
         Head1+="</div>";
         Head2+="</div>";
-        let iRow=0;
-        let Body="";
+        let iRow=0,Body="";
         this.MyShift.forEach(arrRow => {
             iRow++;
             Body+="<div class='clsRow'>";
@@ -204,24 +207,23 @@ var bsShift = {
         });
         document.getElementById("container").innerHTML=Head1+Head2+Body;
         //特殊日期
-        let TailHoliDay="";
-        OwHoliDay.forEach(element => {
-            let d=new Date(element.d);
-            TailHoliDay+= (d.getFullYear() == this.shiftMonth.getFullYear() && d.getMonth() == this.shiftMonth.getMonth())?"<div>*" + element.d + "：" + element.m+"</div>":""; 
+        data.OwHoliDay.forEach(element => {
+            let cellOwHoliday=document.getElementById("H_"+(new Date(element.d)).getDate());
+            cellOwHoliday.setAttribute("data-tooltip",element.m);
+            cellOwHoliday.classList.add("tooltip");
         });
-        document.getElementById("tail").innerHTML=TailHoliDay
         //顯示班表內容
         let vRow=0;
         this.MyShift.forEach(arrRow => {
            vRow++;
-           Temp = arrRow.map(e=>{ return (e>=0)?ShiftCode[e]:(type==0)?"　":ShiftCode[0];});
+           Temp = arrRow.map(e=>{ return (e>=0)?data.ShiftCode[e]:(type==0)?"　":data.ShiftCode[0];});
            //console.log(Temp);
-           document.getElementById("M_"+vRow+"_0").innerHTML=Member[vRow-1];
+           document.getElementById("M_"+vRow+"_0").innerHTML=data.Member[vRow-1];
            let cell;
            for (let i = 0; i < Temp.length ; i++) {
                 cell=document.getElementById("M_"+vRow+"_"+(i+1))
                 cell.innerHTML=Temp[i];
-                if (Temp[i]==ShiftCode[0]){
+                if (Temp[i]==data.ShiftCode[0]){
                     cell.classList.add("IsHLD");
                 }
            }
@@ -261,11 +263,11 @@ var bsRandom = {
             this.items[i] = i+1;
             switch (i+1) {
                 case 1: cWt=20;break;
-                case 2: cWt=25;break;
-                case 3: cWt=30;break;
-                case 4: cWt=20;break;
-                case 5: cWt=5;break;
-                default: cWt=5;break;
+                case 2: cWt=40;break;
+                case 3: cWt=25;break;
+                case 4: cWt=5;break;
+                case 5: cWt=3;break;
+                default: cWt=3;break;
             }
             this.itemsWeight[i]=cWt;
         }
@@ -274,7 +276,7 @@ var bsRandom = {
     getMaxShiftRandom:function()
     {
         if (this.items.length==0){
-            this.ini(MaxShift);
+            this.ini(data.MaxShift);
         }
         var totalWeight=eval(this.itemsWeight.join("+"));
         var randomArray=[];

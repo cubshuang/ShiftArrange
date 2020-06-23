@@ -12,3 +12,8 @@ body{font-family: '微軟正黑體',Sans-Serif,Arial;}
 .bsBoderRed{ background-color:lightblue ;border:1px solid #fd0404; border-radius: 8px;}
 .bsButton:hover{ background-color: antiquewhite;}
 .bsLarge{font-size: 1.25rem;margin: 8px;}
+.tooltip{ position: relative; color:red;}
+.tooltip::before { content: attr(data-tooltip); background: #d9444a; color: #fff; padding: .35em .5em; right: 50%; top: -90%; margin-right: 4px; white-space: pre; border-radius: 5px; }
+.tooltip::after { content: ""; right: 60%; top: 12%; border-width: 6px; border-style: solid; border-color: #f1ee3c  transparent transparent transparent; }
+.tooltip::after,.tooltip::before { visibility: hidden; position: absolute; opacity: 0; transition: opacity 0.5s; }
+.tooltip:hover:after,.tooltip:hover:before { visibility: visible; opacity: 1;}
