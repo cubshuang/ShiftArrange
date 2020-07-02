@@ -136,7 +136,21 @@ var bsShift = {
                 for (let k = 0; k < array.length; k++) {
                     if(this.checkShift(unShitf[k]+1,Day,array[k])){
                         this.setShiftValue(unShitf[k]+1,Day,array[k]);
-                        //TODO:insert
+                        //TODO:Add連續班別天數
+                        if (array[k]>0){
+                            iContCls=bsRandom.getMaxShiftRandom();
+                            let contiCnt=(Day+iContCls>this.dCnt)?this.dCnt-Day:iContCls;
+                            if(contiCnt>1){
+                                for (let j = 1; j < contiCnt; j++) {
+                                    if(this.checkShift(unShitf[k]+1,Day+j,array[k])){
+                                        this.setShiftValue(unShitf[k]+1,Day+j,array[k]);
+                                        //console.log("Add連續班別天數");
+                                    }else{
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                     }else{
                         letsCHK=false;
                         ir++;
