@@ -164,7 +164,7 @@ var bsShift = {
                         Day-=1;
                         irBK+=1;
                         ir=0;
-                        if(irBK>30){
+                        if(irBK>100){
                             //console.log("停止");
                             return false;
                         }
