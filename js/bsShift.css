@@ -2,6 +2,7 @@ body{font-family: '微軟正黑體',Sans-Serif,Arial;}
 .clsTable { display: table; width: 100%; border-spacing: 1px; }
 .clsRow { display: table-row; border-bottom: #188EBE 1px solid;}
 .clsCol:first-child { background-color: #197864;color: #ffffff;}
+.clsCol:not(:first-child):hover {background-color: #EFFD5F;cursor:pointer;}
 .clsHead, .clsWeek { display: table-cell; vertical-align: top; text-align: center; padding: 5px 8px;}
 .clsHead:first-child, .clsWeek:first-child{ background-color:#1844be;}
 .clsCol{ display: table-cell; vertical-align:middle ; text-align: center; padding: 3px; border-bottom: #188EBE 1px solid; }
@@ -17,3 +18,4 @@ body{font-family: '微軟正黑體',Sans-Serif,Arial;}
 .tooltip::after { content: ""; right: 60%; top: 12%; border-width: 6px; border-style: solid; border-color: #f1ee3c  transparent transparent transparent; }
 .tooltip::after,.tooltip::before { visibility: hidden; position: absolute; opacity: 0; transition: opacity 0.5s; }
 .tooltip:hover:after,.tooltip:hover:before { visibility: visible; opacity: 1;}
+.tooltip:hover{cursor:grab;}
