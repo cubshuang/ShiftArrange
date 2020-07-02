@@ -237,6 +237,17 @@ var bsShift = {
                 }
            }
         });
+        //綁定事件
+        document.querySelectorAll(".clsCol:not(:first-child)").forEach(e => {
+            e.addEventListener('click',function(){
+                console.log(this.id);
+                let val=this.id.split("_");
+                let shift=2;
+                bsShift.setShiftValue(val[1],val[2],shift);
+                this.innerHTML=data.ShiftCode[shift];
+                //console.log(bsShift.MyShift);
+            });
+        });
     },
     isEqualDate(element,value) {
         let d=new Date(element);
