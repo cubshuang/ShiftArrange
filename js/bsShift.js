@@ -213,10 +213,13 @@ var bsShift = {
         });
         document.getElementById("container").innerHTML=Head1+Head2+Body;
         //特殊日期
-        data.OwHoliDay.forEach(element => {
-            let cellOwHoliday=document.getElementById("H_"+(new Date(element.d)).getDate());
-            cellOwHoliday.setAttribute("data-tooltip",element.m);
-            cellOwHoliday.classList.add("tooltip");
+        data.OwHoliDay.forEach(e => {
+            let holiday=new Date(e.d);
+            if(holiday.getFullYear()==this.shiftMonth.getFullYear() && holiday.getMonth()==this.shiftMonth.getMonth()){
+                let cellHLD=document.getElementById("H_"+holiday.getDate());
+                cellHLD.setAttribute("data-tooltip",e.m);
+                cellHLD.classList.add("tooltip");
+            }
         });
         //顯示班表內容
         let vRow=0;
