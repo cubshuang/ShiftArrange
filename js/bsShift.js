@@ -3,6 +3,7 @@ const _dfSign=-1;  //Holidy 0:自排,-1:預設
 var bsShift = {
     MyShift:[], clsChk:[], cntChk:[], hldCnt:[], arrHLD:[],arrWKD:[],shfitArray:[],
     dCnt:0, mCnt:0, hCnt:0, shiftMonth:null, setX:null, setY:null, setValue:null,
+    choiceShfit:-1,
     //initial        
     initial:function(addMonth){
         let dd=(addMonth==null)?Date.now():new Date(bsShift.shiftMonth.getFullYear(),bsShift.shiftMonth.getMonth()+1+addMonth,0);
@@ -191,7 +192,7 @@ var bsShift = {
         return true;
     },
     //20200624↑
-    showUI:function(type){
+    showUIFrame:function(){
         let cssHD="";
         let Head1="<div class='clsRow'>" + "<div class='clsHead'>"+this.shiftMonth.getFullYear()+"/"+(this.shiftMonth.getMonth()+1)+""+"</div>";
         let Head2="<div class='clsRow'>" + "<div class='clsWeek'>姓名</div>";
@@ -212,6 +213,19 @@ var bsShift = {
             Body+="</div>";
         });
         document.getElementById("container").innerHTML=Head1+Head2+Body;
+        //console.log(data.ShiftCode.map((e, idx) =>{ return "<input  type='radio' name='choiceSfiht' value='" + idx + "'>" + data.ShiftName[idx]}));
+        document.getElementById("divSfhit").innerHTML=data.ShiftCode.map((e, idx) =>{ return "<input  type='radio' name='choiceShfit' value='" + idx + "'>" + data.ShiftName[idx]}).join("");
+        //綁定事件
+        document.getElementsByName("choiceShfit").forEach(e => {
+            e.addEventListener('click',function(){
+                bsShift.choiceShfit=this.value;
+                document.getElementById('divMouseTxt').innerHTML=data.ShiftName[this.value];
+            });
+       });
+    },
+    showUI:function(type){
+        //表頭
+        if(type==0){ this.showUIFrame(); }
         //特殊日期
         data.OwHoliDay.forEach(e => {
             let holiday=new Date(e.d);
@@ -234,23 +248,35 @@ var bsShift = {
                 cell.innerHTML=Temp[i];
                 if (Temp[i]==data.ShiftCode[0]){
                     cell.classList.add("IsHLD");
+                }else{
+                    cell.classList.remove("IsHLD");
                 }
            }
         });
         //綁定事件
         document.querySelectorAll(".clsCol:not(:first-child)").forEach(e => {
             e.addEventListener('click',function(){
-                console.log(this.id);
-                let val=this.id.split("_");
-                let shift=2;
-                bsShift.setShiftValue(val[1],val[2],shift);
-                this.innerHTML=data.ShiftCode[shift];
-                //console.log(bsShift.MyShift);
+                return bsShift.modCell(this.id,bsShift.choiceShfit);
             });
+            e.oncontextmenu = function(){
+                return bsShift.modCell(this.id,_dfSign);
+            };
         });
     },
-    isEqualDate(element,value) {
+    isEqualDate:function(element,value) {
         let d=new Date(element);
         return (d.getDate() == value.getDate() && d.getFullYear() == value.getFullYear() && d.getMonth() == value.getMonth() );
+    },
+    modCell:function(id,shift){
+        //console.log(id);
+        let val=id.split("_");
+        this.setShiftValue(val[1],val[2],shift);
+        let cell=document.getElementById(id);
+        cell.innerHTML=(shift>=0 && shift<data.ShiftCode.length)?data.ShiftCode[shift]:"";
+        cell.classList.remove("IsHLD");
+        if (shift==0){
+            cell.classList.add("IsHLD");
+        }
+        return false;
     }
 }
