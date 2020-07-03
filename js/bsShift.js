@@ -213,7 +213,6 @@ var bsShift = {
             Body+="</div>";
         });
         document.getElementById("container").innerHTML=Head1+Head2+Body;
-        //console.log(data.ShiftCode.map((e, idx) =>{ return "<input  type='radio' name='choiceSfiht' value='" + idx + "'>" + data.ShiftName[idx]}));
         document.getElementById("divSfhit").innerHTML=data.ShiftCode.map((e, idx) =>{ return "<input  type='radio' name='choiceShfit' value='" + idx + "'>" + data.ShiftName[idx]}).join("");
         //綁定事件
         document.getElementsByName("choiceShfit").forEach(e => {
@@ -224,6 +223,9 @@ var bsShift = {
        });
     },
     showUI:function(type){
+        //清除手動排班選項
+        document.getElementById('divMouseTxt').innerHTML="";
+        document.getElementsByName("choiceShfit").forEach(e => {e.checked = false;});
         //表頭
         if(type==0){ this.showUIFrame(); }
         //特殊日期
