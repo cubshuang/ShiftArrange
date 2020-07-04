@@ -9,10 +9,10 @@ body{font-family: '微軟正黑體',Sans-Serif,Arial;}
 .clsHead, .clsWeek { background-color: #188EBE; color: #ffffff; }
 .clsHoliday{ background-color: #be18b0; color: #ffffff; }
 .IsHLD{color: #fd0404;}
-.bsButton{ padding: 8px 16px; display: inline-block; vertical-align: middle; overflow: hidden; text-decoration: none; text-align: center; cursor: pointer; white-space: nowrap;}
+.bsButton{ padding: 5px 10px; display: inline-block; vertical-align: middle; overflow: hidden; text-decoration: none; text-align: center; cursor: pointer; white-space: nowrap;}
 .bsBoderRed{ background-color:lightblue ;border:1px solid #fd0404; border-radius: 8px;}
 .bsButton:hover{ background-color: antiquewhite;}
-.bsLarge{font-size: 1.25rem;margin: 8px;vertical-align:middle ;}
+.bsLarge{font-size: 1.25rem;margin: 6px;vertical-align:middle ;}
 .tooltip{ position: relative; color:red;}
 .tooltip::before { content: attr(data-tooltip); background: #d9444a; color: #fff; padding: .35em .5em; right: 50%; top: -90%; margin-right: 4px; white-space: pre; border-radius: 5px; }
 .tooltip::after { content: ""; right: 60%; top: 12%; border-width: 6px; border-style: solid; border-color: #f1ee3c  transparent transparent transparent; }

@@ -3,56 +3,34 @@
     <meta http-equiv="Content-Language" content="zh-tw">
     <meta charset="UTF-8">
     <title>cubshuang 排班小工具</title>
-    <link href="js//bsShift.css" rel="stylesheet" type="text/css" media="all">
+    <link href="css//bsShift.css" rel="stylesheet" type="text/css" media="all">
+    <link href="css//bsMouse.css" rel="stylesheet" type="text/css" media="all">
     <script src="js/bsData.js" type="text/javascript"></script>
     <script src="js/bsRandom.js" type="text/javascript"></script>
     <script src="js/bsShift.js" type="text/javascript"></script>
+    <script src="js/bsMouse.js" type="text/javascript"></script>
 </head>
 <body>
     <div id="divPanel" class="bsLarge">
-        <div style="display:inline-block;font-size: 2rem;margin:0 8px; vertical-align:middle;">排班小工具</div>
+        <div style="display:inline-block;font-size: 1.75rem;margin:0 6px; vertical-align:middle;">排班小工具</div>
         <button name="btnGetMonth" id="btnPreMonth" class="bsButton bsBoderRed bsLarge">往上個月</button>
         <button name="btnGetMonth"id="btnThisMonth" class="bsButton bsBoderRed bsLarge">當月</button>
         <button name="btnGetMonth"id="btnNextMonth" class="bsButton bsBoderRed bsLarge">往下個月</button>
         <button id="btnGenShift" class="bsButton bsBoderRed bsLarge">產生排班表</button>
-        <div style="display:inline-block;font-size: 1.5rem;margin-left:10px;vertical-align:middle;">手動排班班別</div>
+        <div style="display:inline-block;font-size: 1.25rem;margin-left:10px;vertical-align:middle;">手動排班班別</div>
         <div id="divSfhit" class="radioSet bsLarge"></div>
     </div>
     <div id="container" class="clsTable"></div>
     <div id="result"></div>
-    <div id="divMouseTxt" style="position: absolute;"></div>
+    <div id="divMouseTxt"><div class='mouseTxt'>我要排</div><div class='mouseTxt' id='mouseShift'>Ｘ班</div></div>
 </body>
 <script>
-window.addEventListener('load' ,function(){
-    bsShift.initial();
-    document.onmousemove = function(ev){
-        var oDiv = document.getElementById('divMouseTxt');
-        var oEvent = ev||event;
-        var pos = getPos(oEvent);
-        //後面的div跟這前面的div走
-        // for(var i = oDiv.length-1; i>0;i--){
-        // 	oDiv[i].style.left = oDiv[i-1].offsetLeft+'px';
-        // 	oDiv[i].style.top = oDiv[i-1].offsetTop+'px';
-        // }
-        //第一個div跟著滑鼠走
-        // oDiv[0].style.left = pos.x+'px';
-        // oDiv[0].style.top = pos.y+'px';
-        oDiv.style.left = pos.x+'px';
-        oDiv.style.top = pos.y+'px';
-    }
-});
-document.getElementById("btnGenShift").addEventListener('click',function(){
-    bsShift.genShift()
-});
-document.getElementsByName("btnGetMonth").forEach(e => {
-    e.addEventListener('click',function(){
-        bsShift.initial((this.id=="btnPreMonth")?-1:(this.id=="btnNextMonth")?1:null);
+    window.addEventListener('load' ,function(){ bsShift.initial(); });
+    document.getElementById("btnGenShift").addEventListener('click',function(){ bsShift.genShift() });
+    document.getElementsByName("btnGetMonth").forEach(e => {
+        e.addEventListener('click',function(){
+            bsShift.initial((this.id=="btnPreMonth")?-1:(this.id=="btnNextMonth")?1:null);
+        });
     });
-});
-function getPos(ev){
-	var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-	var scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft;
-	return {x:ev.clientX+scrollLeft+15,y:ev.clientY+scrollTop+20}
-}
 </script>
 </html>

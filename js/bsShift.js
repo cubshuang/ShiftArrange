@@ -218,13 +218,17 @@ var bsShift = {
         document.getElementsByName("choiceShfit").forEach(e => {
             e.addEventListener('click',function(){
                 bsShift.choiceShfit=this.value;
-                document.getElementById('divMouseTxt').innerHTML=data.ShiftName[this.value];
+                //document.getElementById('divMouseTxt').innerHTML=data.ShiftName[this.value];
+                document.getElementById("mouseShift").innerHTML=data.ShiftName[this.value];
+                document.getElementById('divMouseTxt').style.display="inline";
             });
        });
     },
     showUI:function(type){
         //清除手動排班選項
-        document.getElementById('divMouseTxt').innerHTML="";
+        this.choiceShfit=_dfSign;
+        document.getElementById('divMouseTxt').style.display="none";
+        document.getElementById("mouseShift").innerHTML="";
         document.getElementsByName("choiceShfit").forEach(e => {e.checked = false;});
         //表頭
         if(type==0){ this.showUIFrame(); }
@@ -258,10 +262,16 @@ var bsShift = {
         //綁定事件
         document.querySelectorAll(".clsCol:not(:first-child)").forEach(e => {
             e.addEventListener('click',function(){
-                return bsShift.modCell(this.id,bsShift.choiceShfit);
+                if(bsShift.choiceShfit!=_dfSign){
+                    bsShift.modCell(this.id,bsShift.choiceShfit);
+                }
+                return false;
             });
             e.oncontextmenu = function(){
-                return bsShift.modCell(this.id,_dfSign);
+                if(bsShift.choiceShfit!=_dfSign){
+                    bsShift.modCell(this.id,_dfSign);
+                }
+                return false;
             };
         });
     },
@@ -276,9 +286,6 @@ var bsShift = {
         let cell=document.getElementById(id);
         cell.innerHTML=(shift>=0 && shift<data.ShiftCode.length)?data.ShiftCode[shift]:"";
         cell.classList.remove("IsHLD");
-        if (shift==0){
-            cell.classList.add("IsHLD");
-        }
-        return false;
+        if (shift==0){ cell.classList.add("IsHLD"); }
     }
 }
