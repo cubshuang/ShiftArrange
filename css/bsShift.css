@@ -1,4 +1,4 @@
-body{font-family: '微軟正黑體',Sans-Serif,Arial;}
+body{font-family: '微軟正黑體',Sans-Serif,Arial;color:#222222}
 .clsTable { display: table; width: 100%; border-spacing: 1px; }
 .clsRow { display: table-row; border-bottom: #188EBE 1px solid;}
 .clsCol:first-child { background-color: #197864;color: #ffffff;}
