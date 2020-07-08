@@ -196,13 +196,16 @@ var bsShift = {
         let cssHD="";
         let Head1="<div class='clsRow'>" + "<div class='clsHead'>"+this.shiftMonth.getFullYear()+"/"+(this.shiftMonth.getMonth()+1)+""+"</div>";
         let Head2="<div class='clsRow'>" + "<div class='clsWeek'>姓名</div>";
+        let Tail="<div class='clsRow'>" + "<div class='clsTail'></div>";
         for (let i = 0; i < this.clsChk.length; i++) {
             cssHD=(this.arrHLD[i]=="")?"":" clsHoliday";
             Head1+="<div class='clsHead" + cssHD + "' id='H_" + (i+1) +"'>"+ (i+1) +"</div>";
             Head2+="<div class='clsWeek" + cssHD + "' id='W_" + (i+1) +"'>"+ this.arrWKD[i] +"</div>";
+            Tail+="<div class='clsTail' id='T_" + (i+1) +"'></div>";
         }
         Head1+="</div>";
         Head2+="</div>";
+        Tail+="</div>";
         let iRow=0,Body="";
         this.MyShift.forEach(arrRow => {
             iRow++;
@@ -212,7 +215,7 @@ var bsShift = {
             }
             Body+="</div>";
         });
-        document.getElementById("container").innerHTML=Head1+Head2+Body;
+        document.getElementById("container").innerHTML=Head1+Head2+Body+Tail;
         document.getElementById("divSfhit").innerHTML=data.ShiftCode.map((e, idx) =>{ return "<input  type='radio' name='choiceShfit' value='" + idx + "'>" + data.ShiftName[idx]}).join("");
         //綁定事件
         document.getElementsByName("choiceShfit").forEach(e => {
@@ -262,15 +265,11 @@ var bsShift = {
         //綁定事件
         document.querySelectorAll(".clsCol:not(:first-child)").forEach(e => {
             e.addEventListener('click',function(){
-                if(bsShift.choiceShfit!=_dfSign){
-                    bsShift.modCell(this.id,bsShift.choiceShfit);
-                }
+                bsShift.modCell(this.id,bsShift.choiceShfit);
                 return false;
             });
             e.oncontextmenu = function(){
-                if(bsShift.choiceShfit!=_dfSign){
-                    bsShift.modCell(this.id,_dfSign);
-                }
+                bsShift.modCell(this.id,_dfSign);
                 return false;
             };
         });
@@ -280,12 +279,40 @@ var bsShift = {
         return (d.getDate() == value.getDate() && d.getFullYear() == value.getFullYear() && d.getMonth() == value.getMonth() );
     },
     modCell:function(id,shift){
-        //console.log(id);
-        let val=id.split("_");
-        this.setShiftValue(val[1],val[2],shift);
-        let cell=document.getElementById(id);
-        cell.innerHTML=(shift>=0 && shift<data.ShiftCode.length)?data.ShiftCode[shift]:"";
-        cell.classList.remove("IsHLD");
-        if (shift==0){ cell.classList.add("IsHLD"); }
+        if(bsShift.choiceShfit!=_dfSign){
+            //console.log(id);
+            let val=id.split("_");
+            this.setShiftValue(val[1],val[2],shift);
+            let cell=document.getElementById(id);
+            cell.innerHTML=(shift>=0 && shift<data.ShiftCode.length)?data.ShiftCode[shift]:"";
+            cell.classList.remove("IsHLD");
+            if (shift==0){ cell.classList.add("IsHLD"); }
+            let chkRet=this.checkCell(val[1],val[2],shift);
+            if(chkRet.hasError){
+                console.log(chkRet.errMsg);
+                cell.setAttribute("data-tooltip",chkRet.errMsg);
+                cell.classList.add("tooltip","warning");
+            }else{
+                cell.setAttribute("data-tooltip","");
+                cell.classList.remove("tooltip","warning");
+            }
+        }else{
+            //TODO:檢核所有欄位
+        }
+
+    },
+    checkCell:function(Mem,Day,Shift){
+        let colArr=arrayColumn(this.MyShift,Day-1);
+        let rowArr=this.MyShift[Mem-1].slice(0);
+        let result={hasError:false,errMsg:""};
+        for (let i = 0; i < data.ShiftCnts.length; i++) {
+            if (colArr.reduce((total,value) => total + ((value==i+1)?1:0),0)>data.ShiftCnts[i]){
+                result.hasError=true;
+                result.errMsg="[ " + data.ShiftName[i+1]+" ] 已排超過預計次數：" + data.ShiftCnts[i];
+                break;
+            }
+        }
+        //TODO:continue times
+        return result;
     }
 }

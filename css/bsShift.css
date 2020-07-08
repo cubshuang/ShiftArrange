@@ -3,7 +3,7 @@ body{font-family: '微軟正黑體',Sans-Serif,Arial;color:#222222}
 .clsRow { display: table-row; border-bottom: #188EBE 1px solid;}
 .clsCol:first-child { background-color: #197864;color: #ffffff;}
 .clsCol:not(:first-child):hover {background-color: #EFFD5F;cursor:pointer;}
-.clsHead, .clsWeek { display: table-cell; vertical-align: top; text-align: center; padding: 5px 8px;}
+.clsHead, .clsWeek, .clsTail { display: table-cell; vertical-align: top; text-align: center; padding: 5px 8px;}
 .clsHead:first-child, .clsWeek:first-child{ background-color:#1844be;}
 .clsCol{ display: table-cell; vertical-align:middle ; text-align: center; padding: 3px; border-bottom: #188EBE 1px solid; }
 .clsHead, .clsWeek { background-color: #188EBE; color: #ffffff; }
