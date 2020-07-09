@@ -280,26 +280,36 @@ var bsShift = {
     },
     modCell:function(id,shift){
         if(bsShift.choiceShfit!=_dfSign){
-            //console.log(id);
-            let val=id.split("_");
-            this.setShiftValue(val[1],val[2],shift);
             let cell=document.getElementById(id);
-            cell.innerHTML=(shift>=0 && shift<data.ShiftCode.length)?data.ShiftCode[shift]:"";
-            cell.classList.remove("IsHLD");
-            if (shift==0){ cell.classList.add("IsHLD"); }
-            let chkRet=this.checkCell(val[1],val[2],shift);
-            if(chkRet.hasError){
-                console.log(chkRet.errMsg);
-                cell.setAttribute("data-tooltip",chkRet.errMsg);
-                cell.classList.add("tooltip","warning");
+            let val=id.split("_");
+            if(shift!=_dfSign){
+                if(this.preCheckCol(val[2])==false){
+                    this.setShiftValue(val[1],val[2],shift);//設定值
+                    cell.innerHTML=(shift>=0 && shift<data.ShiftCode.length)?data.ShiftCode[shift]:"";
+                    cell.classList.remove("IsHLD");
+                    if (shift==0){ cell.classList.add("IsHLD"); }
+                    let chkRet=this.checkCell(val[1],val[2],shift);
+                    if(chkRet.hasError){
+                        console.log(chkRet.errMsg);
+                        cell.setAttribute("data-tooltip",chkRet.errMsg);
+                        cell.classList.add("tooltip","warning");
+                    }else{
+                        cell.setAttribute("data-tooltip","");
+                        cell.classList.remove("tooltip","warning");
+                    }
+                }
             }else{
-                cell.setAttribute("data-tooltip","");
-                cell.classList.remove("tooltip","warning");
+                //TODO:檢核所有欄位
+                this.setShiftValue(val[1],val[2],shift);//設定值
+                cell.innerHTML="";
+                cell.classList.remove("IsHLD","tooltip","warning");
             }
-        }else{
-            //TODO:檢核所有欄位
         }
-
+    },
+    preCheckCol:function(Day){
+        return arrayColumn(this.MyShift,Day-1).map((e, idx) => {
+            return document.getElementById("M_"+(idx+1)+"_"+Day).className.indexOf("warning")>=0;
+        }).some(e=> e==true);
     },
     checkCell:function(Mem,Day,Shift){
         let colArr=arrayColumn(this.MyShift,Day-1);
