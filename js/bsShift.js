@@ -314,6 +314,7 @@ var bsShift = {
         let colArr=arrayColumn(this.MyShift,Day-1);
         let rowArr=this.MyShift[Mem-1].slice(0);
         let result={hasError:false,errMsg:""};
+        //檢核班別是否超過次數
         for (let i = 0; i < data.ShiftCnts.length; i++) {
             if (colArr.reduce((total,value) => total + ((value==i+1)?1:0),0)>data.ShiftCnts[i]){
                 result.hasError=true;
@@ -321,7 +322,11 @@ var bsShift = {
                 break;
             }
         }
-        //TODO:continue times
+        //檢核是否連續休假
+        if(rowArr.map((e) => {return (e>0)?"1":"0"}).join("").split("0").some(e=> e.length>data.MaxShift)){
+            result.hasError=true;
+            result.errMsg="超過最大連續上班天數：" + data.MaxShift;
+        }
         return result;
     }
 }
