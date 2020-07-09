@@ -255,10 +255,9 @@ var bsShift = {
            for (let i = 0; i < Temp.length ; i++) {
                 cell=document.getElementById("M_"+vRow+"_"+(i+1))
                 cell.innerHTML=Temp[i];
+                cell.classList.remove("IsHLD","tooltip","warning");
                 if (Temp[i]==data.ShiftCode[0]){
                     cell.classList.add("IsHLD");
-                }else{
-                    cell.classList.remove("IsHLD");
                 }
            }
         });
